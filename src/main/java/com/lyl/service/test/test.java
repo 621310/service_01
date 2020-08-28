@@ -3,11 +3,31 @@ package com.lyl.service.test;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lyl.service.util.PureNetUtil;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 
 public class test {
 
 
+    @Autowired
+    RedisTemplate<String,Object> redisTemplate;
+
+    @Test
+    public void testForValue1(){
+        String key = "zszxz";
+        String value = "知识追寻者";
+        redisTemplate.opsForValue().set(key, value);
+    }
+
+
     public static void main(String[] args) {
+
+
+
+
+
+
 //        System.out.println(getIDBycityName("香港"));
         System.out.println(GetTodayTemperatureByCity("苏州"));
     }
