@@ -26,6 +26,13 @@ public class testController {
         return result;
     }
 
-    //测试调用网络接口
+    //测试redis
+    @RequestMapping(value = "/testredis")
+    public Map<String,Object> testredis(){
+        String aa = (String)redisTemplate.opsForValue().get("zszxz");
+        Map<String,Object> result = new HashMap<>();
+        result.put("aa",aa);
+        return result;
+    }
 
 }
