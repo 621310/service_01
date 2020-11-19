@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
-<mapper namespace="com.lyl.mapper.UserMapper">
+<mapper namespace="com.lyl.service.mapper.UserMapper">
 
 
-    <select id="loadUserByUsername" resultType="com.lyl.entity.User">
+    <select id="loadUserByUsername" resultType="com.lyl.service.entity.User">
         select * from user where username = #{username}
     </select>
 
-    <select id="getUserRoleByUId" resultType="com.lyl.entity.Role">
+    <select id="getUserRoleByUId" resultType="com.lyl.service.entity.Role">
         select * from user_role a
         left join role b
         on a.roleId = b.id
