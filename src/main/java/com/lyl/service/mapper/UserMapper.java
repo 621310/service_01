@@ -16,7 +16,8 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
-    User loadUserByUsername(@Param("username") String username);
+    User loadUser(@Param("username") String username);
 
     List<Role> getUserRoleByUId(@Param("id")String id);
+
 }

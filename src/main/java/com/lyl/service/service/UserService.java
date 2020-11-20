@@ -22,7 +22,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userMapper.loadUserByUsername(username);
+        User user = userMapper.loadUser(username);
         if(user == null){
             throw new UsernameNotFoundException("账户不存在！");
         }

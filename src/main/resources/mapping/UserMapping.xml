@@ -3,7 +3,7 @@
 <mapper namespace="com.lyl.service.mapper.UserMapper">
 
 
-    <select id="loadUserByUsername" resultType="com.lyl.service.entity.User">
+    <select id="loadUser" resultType="com.lyl.service.entity.User">
         select * from user where username = #{username}
     </select>
 
@@ -13,4 +13,5 @@
         on a.roleId = b.id
         where a.userId = #{id}
     </select>
+
 </mapper>
