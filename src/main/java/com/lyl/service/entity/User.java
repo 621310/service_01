@@ -23,6 +23,8 @@ public class User implements UserDetails {
     private String modifyTime;
 
 
+    public User() {
+    }
 
     private List<Role> roles;
 
