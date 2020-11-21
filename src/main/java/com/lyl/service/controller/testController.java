@@ -40,7 +40,7 @@ public class testController {
     }
 
     //测试redis
-    @RequestMapping(value = "/app/testredis")
+    @RequestMapping(value = "/resource/testredis")
     public Map<String,Object> testredis(){
         String aa = (String)redisTemplate.opsForValue().get("zszxz");
         Map<String,Object> result = new HashMap<>();
