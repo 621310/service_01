@@ -1,6 +1,7 @@
 package com.lyl.service.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lyl.service.common.JsonResult;
 import com.lyl.service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,9 +13,9 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
@@ -35,6 +36,12 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     UserService userService;
+
+    private final MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
+
+    public MyWebSecurityConfig(MyAuthenticationSuccessHandler myAuthenticationSuccessHandler) {
+        this.myAuthenticationSuccessHandler = myAuthenticationSuccessHandler;
+    }
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -92,6 +99,7 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .successHandler(new AuthenticationSuccessHandler() {
+                    //自定义登陆成功返回
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
                         response.setContentType("application/json;charset=utf-8");
@@ -131,6 +139,23 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 })
                 .permitAll()
                 .and()
-                .csrf().disable();
+                .csrf().disable().exceptionHandling().authenticationEntryPoint(
+                        // Spring Security 中的一个接口 AuthenticationEntryPoint ，
+                        // 该接口有一个实现类：LoginUrlAuthenticationEntryPoint ，该类中有一个方法 commence，如下
+                        //直接重写这个方法，在方法中返回 JSON 即可，
+                new AuthenticationEntryPoint() {
+                    @Override
+                    public void commence(HttpServletRequest req, HttpServletResponse resp, AuthenticationException e) throws IOException, ServletException {
+                        resp.setContentType("application/json;charset=utf-8");
+                        PrintWriter out = resp.getWriter();
+                        JsonResult<Map<String,String>> respBean = new JsonResult<>();
+                        respBean.setCode("401");
+                        respBean.setMsg("请登录");
+                        out.write(new ObjectMapper().writeValueAsString(respBean));
+                        out.flush();
+                        out.close();
+                    }
+                }
+        );
     }
 }
