@@ -119,6 +119,7 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
                     }
                 })
                 .failureHandler(new AuthenticationFailureHandler() {
+                    //自定义登录失败返回json
                     @Override
                     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException, IOException {
                         response.setContentType("application/json;charset=utf-8");
@@ -146,6 +147,7 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .csrf().disable().exceptionHandling().authenticationEntryPoint(
+                        //自定义未登录返回Json
                         // Spring Security 中的一个接口 AuthenticationEntryPoint ，
                         // 该接口有一个实现类：LoginUrlAuthenticationEntryPoint ，该类中有一个方法 commence，如下
                         //直接重写这个方法，在方法中返回 JSON 即可，
