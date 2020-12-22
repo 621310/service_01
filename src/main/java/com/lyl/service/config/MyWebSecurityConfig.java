@@ -2,7 +2,9 @@ package com.lyl.service.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lyl.service.common.JsonResult;
+import com.lyl.service.entity.User;
 import com.lyl.service.service.UserService;
+import com.lyl.service.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -105,8 +107,12 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
                         response.setContentType("application/json;charset=utf-8");
                         PrintWriter pw = response.getWriter();
                         Map<String, Object> map = new HashMap<String, Object>();
+                        Map<String,Object> result = new HashMap<>();
+                        User userInfo = (User)authentication.getPrincipal();
+                        result.put("result",userInfo);
+                        result.put("token", JwtUtil.CreateToken(userInfo.getId()));
                         map.put("status", 200);
-                        map.put("msg", authentication.getPrincipal());
+                        map.put("msg", result);
                         pw.write(new ObjectMapper().writeValueAsString(map));
                         pw.flush();
                         pw.close();
